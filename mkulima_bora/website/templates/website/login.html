@@ -1,0 +1,36 @@
+{% extends "website/base.html" %}
+{% block content %}
+
+<div class="container mt-5 card p-5" style="max-width: 500px;" >
+    <form method="post">
+        {% csrf_token %}
+        <h3 class="">Login As Member</h3>
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control" placeholder="Username" name="username">
+                    <label for="Username">Username</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="password" class="form-control"  placeholder="Password" name="password">
+                    <label for="password">Password</label>
+                </div>
+            </div>
+            <small class="text-muted">
+                <a href="/">Forgot password?</a>
+            </small>
+            <div class="col-12">
+                <button class="btn btn-secondary rounded-pill py-3 px-5" type="submit">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="small mt-3" style="text-align: center;">NB:/ To be a member, visit nearest Mkulima Bora offices.</div>
+{% endblock %}

@@ -11,4 +11,6 @@ urlpatterns = [
     path('logout/', views.custom_logout, name='logout'),
     path('change-password/', views.change_password_view, name='change_password'),
     path('add-picture/', views.add_picture_to_gallery, name='add_picture'),
+    path('subscribers/', views.all_subscribers, name="subscribers"),
+    path('delete-pic/<int:pk>/', views.delete_picture_from_gallery, name='delete_picture'),
 ]

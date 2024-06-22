@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from .models import Image
+from .models import CustomUser
 
 
 class ImageForm(forms.ModelForm):
@@ -18,13 +19,14 @@ class ContactForm(forms.Form):
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        model = CustomUser
+        fields = ['username', 'first_name', 'last_name', 'email', 'profile_pic']
 
 
 class CustomUserChangeForm(UserChangeForm):
+    profile_pic = forms.ImageField(required=False)
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        model = CustomUser
+        fields = ['username', 'first_name', 'last_name', 'email', 'profile_pic']
 
 

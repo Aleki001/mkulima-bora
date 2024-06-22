@@ -42,6 +42,7 @@
             <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password"><i class="bi bi-pencil-square" style="font-size: 1.3em;margin-right: 7px;"></i>Change password</a>
             <a class="list-group-item list-group-item-action" data-toggle="list" href="#add-news"><i class="bi bi-newspaper" style="font-size: 1.3em;margin-right: 7px;"></i>Add News</a>
             <a class="list-group-item list-group-item-action" data-toggle="list" href="#add-gallery"><i class="bi bi-card-image" style="font-size: 1.3em;margin-right: 7px;"></i>Add to Gallery</a>
+            <a class="list-group-item "href="{% url 'subscribers' %}"><i class="bi bi-people-fill" style="font-size: 1.3em;margin-right: 7px;"></i>Subscribed Users</a>
           </div>
         </div>
         <div class="col-md-9">
@@ -53,20 +54,25 @@
             </div>
             
 
-              <form method="post" action="{% url 'account' %}">
+              <form method="post" action="{% url 'account' %}" enctype="multipart/form-data">
                 {% csrf_token %}
 
-              <div class="card-body media align-items-center">
-                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
-                <div class="media-body ml-4">
-                  <label class="btn btn-outline-primary mt-2">
-                    Upload new photo
-                    <input type="file" class="account-settings-fileinput">
-                  </label> &nbsp;
-  
-                  <div class="text-dark small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
-                </div>
+                <div class="card-body media align-items-center">
+                  {% if profile.profile_pic %}
+                      <img src="{{ profile.profile_pic.url }}" alt="" class="d-block ui-w-80">
+                  {% else %}
+                      <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-80">
+                  {% endif %}
+                  <div class="media-body ml-4">
+                      <label class="btn btn-outline-primary mt-2">
+                          Upload new photo
+                          <input type="file" name="profile_pic" class="account-settings-fileinput">
+                      </label> &nbsp;
+                      <div class="text-dark small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                  </div>
               </div>
+              
+              
               <hr class="border-light m-0">
   
               <div class="card-body">
@@ -97,6 +103,8 @@
               </div>
   
             </div>
+            
+              
             <div class="tab-pane fade bordered" id="account-change-password">
               <form method="post" action="{% url 'change_password' %}">
                 {% csrf_token %}

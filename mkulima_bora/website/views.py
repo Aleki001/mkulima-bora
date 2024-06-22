@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import SubscribedUsers
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -13,6 +13,7 @@ from django.contrib.auth import update_session_auth_hash
 from .forms import CustomUserChangeForm, ImageForm
 from django.conf import settings
 import requests
+from .models import UserProfile
 
 
 
@@ -96,19 +97,32 @@ def login_view(request):
 
 
 
+
 @login_required
 def account(request):
+    user = request.user
+    try:
+        profile = user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=user)
+
     if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, instance=request.user)
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
+            profile_pic = form.cleaned_data.get('profile_pic')
+            if profile_pic:
+                profile.profile_pic = profile_pic
+                profile.save()
             form.save()
             messages.success(request, 'Your profile was successfully updated!')
             return redirect('account')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        form = CustomUserChangeForm(instance=request.user)
-    return render(request, 'website/account.html', {'form': form})
+        form = CustomUserChangeForm(instance=user)
+    
+    return render(request, 'website/account.html', {'form': form, 'profile': profile})
+
 
 @login_required
 def custom_logout(request):
@@ -135,6 +149,7 @@ def change_password_view(request):
     return render(request, 'website/account.html', {'form': form})
 
 
+@login_required
 def add_picture_to_gallery(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -147,3 +162,14 @@ def add_picture_to_gallery(request):
     else:
         form = ImageForm()
     return render(request, 'website/account.html', {'form': form})
+
+
+@login_required
+def delete_picture_from_gallery(request, pk):
+    pic = get_object_or_404(Image, pk=pk)
+    pic.delete()
+    return redirect('gallery')
+
+def all_subscribers(request):
+    subscribers = SubscribedUsers.objects.all()
+    return render(request, "website/subscribed.html", {'subscribers': subscribers})

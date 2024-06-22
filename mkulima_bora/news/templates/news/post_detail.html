@@ -1,12 +1,13 @@
 {% extends "website/base.html" %}
 {% block content %}
 <div class="container mt-5 wow fadeInUp">
+    <a href="{% url 'news' %}" class="btn btn-primary mb-3"><< Back</a>
     <div class="card mb-4">
         <div class="card-body">
             <div class="article-metadata">
                 <small class="text-muted">{{ post.date_posted | date:"F d, Y" }}</small>
             </div>
-            <h2 class="card-title">{{ post.title }}</h2>
+            <h2 class="card-title"><u>{{ post.title }}</u></h2>
             <h5>{{ post.subtitle }}</h5>
             <p class="card-text">{{ post.content }}</p>
         </div>

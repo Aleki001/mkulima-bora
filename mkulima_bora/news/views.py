@@ -25,3 +25,7 @@ def create_post(request):
         form = PostForm()
     return render(request, 'website/account.html', {'form': form})
 
+def delete_news(request, pk):
+    news = get_object_or_404(Post, pk=pk)
+    news.delete()
+    return redirect('news')
